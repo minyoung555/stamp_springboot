@@ -36,5 +36,5 @@ out/
 ### VS Code ###
 .vscode/
 
-##setting
-application.properties
+## Mongodb Setting ##
+application-mongodb.properties
