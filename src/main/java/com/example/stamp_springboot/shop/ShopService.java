@@ -1,6 +1,6 @@
 package com.example.stamp_springboot.shop;
 
-import com.example.stamp_springboot.dto.SignupDto;
+import com.example.stamp_springboot.dto.ShopSignupDto;
 import com.example.stamp_springboot.mapper.ShopMapper;
 import com.example.stamp_springboot.model.ShopModel;
 import com.example.stamp_springboot.repository.ShopRepository;
@@ -22,8 +22,8 @@ public class ShopService {
         this.shopMapper = shopMapper;
     }
 
-    public void signup(SignupDto signupDto) {
-        String business_number = signupDto.getBusiness_number();
+    public void signup(ShopSignupDto shopSignupDto) {
+        String business_number = shopSignupDto.getBusiness_number();
 
         Optional<ShopModel> existingShop = shopRepository.findByBusinessNumber(business_number);
 
@@ -31,7 +31,7 @@ public class ShopService {
             log.error("이미 존재하는 가게");
         }
         else {
-            ShopModel shopModel = shopMapper.signDtoToShopModel(signupDto);
+            ShopModel shopModel = shopMapper.signDtoToShopModel(shopSignupDto);
             shopRepository.save(shopModel);
             log.info("가게 등록 성공");
         }
