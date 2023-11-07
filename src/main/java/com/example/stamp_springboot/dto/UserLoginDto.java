@@ -3,6 +3,6 @@ package com.example.stamp_springboot.dto;
 import lombok.Data;
 
 @Data
-public class LoginDto {
+public class UserLoginDto {
     private String phoneNumber;
 }
