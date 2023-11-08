@@ -3,16 +3,11 @@ package com.example.stamp_springboot.user;
 import com.example.stamp_springboot.dto.UserLoginDto;
 import com.example.stamp_springboot.dto.UserSignupDto;
 import com.example.stamp_springboot.mapper.UserSignupMapper;
-import com.example.stamp_springboot.model.StampModel;
 import com.example.stamp_springboot.model.UserModel;
 import com.example.stamp_springboot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
