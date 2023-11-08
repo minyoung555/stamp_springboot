@@ -1,12 +1,13 @@
 package com.example.stamp_springboot.shop;
 
+import com.example.stamp_springboot.dto.ShopLoginDto;
 import com.example.stamp_springboot.dto.ShopSignupDto;
+import com.example.stamp_springboot.model.ShopModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @Slf4j
 @RestController
@@ -17,6 +18,16 @@ public class ShopController {
     @Autowired
     public ShopController(ShopService shopService) { this.shopService = shopService; }
 
+    // 가게 등록
     @PostMapping("/signup")
     public void signup(@RequestBody ShopSignupDto shopSignupDto) { shopService.signup(shopSignupDto); }
+
+    // 가게 로그인
+    @PostMapping("/login")
+    public void login(@RequestBody ShopLoginDto shopLoginDto) { shopService.login(shopLoginDto); }
+
+    @GetMapping("/getShop")
+    public Optional<ShopModel> getShop(@RequestParam String businessNumber) {
+        return shopService.getShop(businessNumber);
+    }
 }
