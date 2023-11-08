@@ -3,6 +3,7 @@ package com.example.stamp_springboot.user;
 import com.example.stamp_springboot.dto.UserLoginDto;
 import com.example.stamp_springboot.dto.UserSignupDto;
 import com.example.stamp_springboot.mapper.UserSignupMapper;
+import com.example.stamp_springboot.model.StampModel;
 import com.example.stamp_springboot.model.UserModel;
 import com.example.stamp_springboot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,11 +43,12 @@ public class UserService {
 
     public String login(UserLoginDto userLoginDto){
         try {
-            Optional<UserModel> userModel = userRepository.findByPhoneNumber(userLoginDto.getPhoneNumber());
+            Optional<UserModel> loginUserModel = userRepository.findByPhoneNumber(userLoginDto.getPhoneNumber());
 
-            if(userModel.isPresent()) {
-                log.info("Login Success : " + userModel.get().getName());
-                return "login success : " + userModel.get().getName();
+            if(loginUserModel.isPresent()) {
+                UserModel userModel = loginUserModel.get();
+                log.info("Login Success : " + userModel.getName());
+                return "login success : " + userModel.getName();
             }
 
             log.error("User not found");
