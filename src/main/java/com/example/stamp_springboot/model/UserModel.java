@@ -38,6 +38,6 @@ public class UserModel {
 
     @Field("updated_at")
     @LastModifiedDate
-    private LocalDateTime updateTime = LocalDateTime.now();;
+    private LocalDateTime updateTime = LocalDateTime.now();
 }
 
