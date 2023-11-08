@@ -9,7 +9,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @NoArgsConstructor
@@ -24,11 +26,14 @@ public class ShopModel {
     private String shop_name;
 
     @Indexed(unique = true)
-    private String business_number;
+    @Field("business_number")
+    private String businessNumber;
 
+    @Field("created_at")
     @CreatedDate
-    private Date createTime;
+    private LocalDateTime createTime = LocalDateTime.now();
 
+    @Field("updated_at")
     @LastModifiedDate
-    private Date updateTime;
+    private LocalDateTime updateTime = LocalDateTime.now();
 }
