@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 public interface UserSignupMapper {
     UserSignupMapper INSTANCE = Mappers.getMapper(UserSignupMapper.class);
 
-    @Mapping(source="UserSignupDto.name",target="name")
-    @Mapping(source="UserSignupDto.phoneNumber",target="phoneNumber")
+    @Mapping(source="name",target="name")
+    @Mapping(source="phoneNumber",target="phoneNumber")
     UserModel toUserModel(UserSignupDto userSignupDto);
 }
