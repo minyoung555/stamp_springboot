@@ -14,12 +14,21 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
     private final UserService userService;
 
-    @PostMapping("/login")
-    public String login(
+    @PostMapping("/signup")
+    public String Signup(
             @RequestBody
             @Valid
             UserSignupDto signupDto
     ) {
         return this.userService.signup(signupDto);
+    }
+
+    @PostMapping("/login")
+    public String Login(
+            @RequestBody
+            @Valid
+            UserLoginDto userLoginDto
+    ) {
+        return this.userService.login(userLoginDto);
     }
 }
