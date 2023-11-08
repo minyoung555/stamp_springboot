@@ -25,7 +25,7 @@ public class UserModel {
     private String name;
 
     @Indexed(unique = true)
-    private String phone_number;
+    private String phoneNumber;
 
     private List<StampModel> stamps;
 
