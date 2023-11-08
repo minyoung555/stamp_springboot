@@ -47,6 +47,10 @@ public class UserService {
 
             if(loginUserModel.isPresent()) {
                 UserModel userModel = loginUserModel.get();
+                userModel.setUpdateTime(LocalDateTime.now());
+
+                userRepository.save(userModel);
+
                 log.info("Login Success : " + userModel.getName());
                 return "login success : " + userModel.getName();
             }
