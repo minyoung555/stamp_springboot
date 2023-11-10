@@ -29,6 +29,8 @@ public class UserModel {
 
     private List<StampModel> stamps;
 
+    private List<CouponModel> coupons;
+
     @CreatedDate
     private Date createTime;
 
