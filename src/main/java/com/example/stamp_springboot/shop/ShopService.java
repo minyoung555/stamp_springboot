@@ -66,7 +66,7 @@ public class ShopService {
             return existingshop;
         }
         else {
-            log.info("존재하지 않는 가게");
+            log.error("존재하지 않는 가게");
             return Optional.empty();
         }
     }
