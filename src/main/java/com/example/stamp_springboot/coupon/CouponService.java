@@ -26,7 +26,7 @@ public class CouponService {
 
         }
         else {
-            log.error("존제하지 않는 가게");
+            log.error("존재하지 않는 가게");
         }
     }
 }

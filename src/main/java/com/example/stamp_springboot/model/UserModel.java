@@ -32,6 +32,8 @@ public class UserModel {
 
     private List<StampModel> stamps;
 
+    private List<CouponModel> coupons;
+
     @Field("created_at")
     @CreatedDate
     private LocalDateTime createTime = LocalDateTime.now();
