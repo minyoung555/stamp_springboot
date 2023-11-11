@@ -12,7 +12,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
@@ -30,9 +30,9 @@ public class UserModel {
     @Indexed(unique = true)
     private String phoneNumber;
 
-    private List<StampModel> stamps;
+    private List<StampModel> stamps = new ArrayList<>();
 
-    private List<CouponModel> coupons;
+    private List<CouponModel> coupons = new ArrayList<>();
 
     @Field("created_at")
     @CreatedDate
