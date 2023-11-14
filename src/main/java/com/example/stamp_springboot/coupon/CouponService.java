@@ -48,15 +48,4 @@ public class CouponService {
         }
     }
 
-    // 쿠폰 조회
-    public void getCoupon(String phoneNumber) {
-        Optional<UserModel> user = userRepository.findByPhoneNumber(phoneNumber);
-
-        if (user.isPresent()) {
-
-        }
-        else {
-            log.error("존재하지 않는 사용자");
-        }
-    }
 }
