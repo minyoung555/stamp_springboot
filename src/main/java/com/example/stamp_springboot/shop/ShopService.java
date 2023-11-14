@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -58,7 +59,7 @@ public class ShopService {
         }
     }
 
-    // 가게 조회
+    // 사업자 번호로 특정 가게 조회
     public Optional<ShopModel> getShop(String businessNumber) {
         Optional<ShopModel> existingshop = shopRepository.findByBusinessNumber(businessNumber);
 
@@ -69,6 +70,11 @@ public class ShopService {
             log.error("존재하지 않는 가게");
             return Optional.empty();
         }
+    }
+
+    // 전체 가게 조회
+    public List<ShopModel> allShops() {
+        return shopRepository.findAll();
     }
 
     // 가게 이름 수정
@@ -88,6 +94,21 @@ public class ShopService {
                 log.info("수정 완료");
                 return "수정되었습니다.";
             }
+        }
+        else {
+            log.error("존재하지 않는 가게");
+            return "존재하지 않는 가게입니다.";
+        }
+    }
+
+    // 가게 삭제
+    public String deleteShop(String businessNumber) {
+        Optional<ShopModel> shop = shopRepository.findByBusinessNumber(businessNumber);
+
+        if (shop.isPresent()) {
+            shopRepository.deleteByBusinessNumber(businessNumber);
+            log.info("삭제 완료");
+            return "가게가 삭제되었습니다.";
         }
         else {
             log.error("존재하지 않는 가게");
