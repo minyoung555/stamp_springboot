@@ -18,5 +18,9 @@ public class StampModel {
     private String id;
     @DBRef
     private ShopModel shop_id;
-    private Number count;
+    private Number count = 1;
+
+    public StampModel(ShopModel shop_id) {
+        this.shop_id = shop_id;
+    }
 }
