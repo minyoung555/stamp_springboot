@@ -3,7 +3,6 @@ package com.example.stamp_springboot.user;
 import com.example.stamp_springboot.dto.UserLoginDto;
 import com.example.stamp_springboot.dto.UserSignupDto;
 import com.example.stamp_springboot.mapper.UserSignupMapper;
-import com.example.stamp_springboot.model.StampModel;
 import com.example.stamp_springboot.model.UserModel;
 import com.example.stamp_springboot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -58,6 +55,37 @@ public class UserService {
             log.error("User not found");
             return "login failed";
         } catch(Exception e) {
+            log.error(String.valueOf(e));
+            throw e;
+        }
+    }
+
+    public UserModel getUser(String phoneNumber) throws Exception {
+        try {
+            Optional<UserModel> userModel = userRepository.findByPhoneNumber(phoneNumber);
+            if(userModel.isPresent()) {
+                log.info("getUser : Success");
+                return userModel.get();
+            }
+            log.error("getUser : User Not Found");
+            throw new Exception("User Not Found");
+        } catch (Exception e) {
+            log.error(String.valueOf(e));
+            throw e;
+        }
+    }
+
+    public String deleteUser(String phoneNumber) throws Exception {
+        try {
+            Optional<UserModel> userModel = userRepository.findByPhoneNumber(phoneNumber);
+            if(userModel.isPresent()) {
+                log.info("deleteUser : Success");
+                userRepository.delete(userModel.get());
+                return "success";
+            }
+            log.error("deleteUser : User Not Found");
+            throw new Exception("User Not Found");
+        } catch (Exception e) {
             log.error(String.valueOf(e));
             throw e;
         }
