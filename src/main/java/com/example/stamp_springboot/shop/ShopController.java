@@ -43,11 +43,10 @@ public class ShopController {
         return shopService.allShops();
     }
 
-
-    // 가게 이름 수정
-    @PatchMapping("/updateName")
-    public String updateShopName(@RequestParam String businessNumber, @RequestBody String newName) {
-        return shopService.updateShopName(businessNumber, newName);
+    // 가게 정보 수정
+    @PatchMapping("/updateShop")
+    public String updateShop(@RequestBody ShopSignupDto shopSignupDto) {
+        return shopService.updateShop(shopSignupDto);
     }
 
     // 가게 삭제

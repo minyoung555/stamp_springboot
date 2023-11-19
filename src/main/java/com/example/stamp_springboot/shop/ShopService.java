@@ -8,6 +8,10 @@ import com.example.stamp_springboot.repository.ShopRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +22,13 @@ import java.util.Optional;
 public class ShopService {
     private final ShopRepository shopRepository;
     private final ShopMapper shopMapper;
+    private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public ShopService(ShopRepository shopRepository, ShopMapper shopMapper) {
+    public ShopService(ShopRepository shopRepository, ShopMapper shopMapper, MongoTemplate mongoTemplate) {
         this.shopRepository = shopRepository;
         this.shopMapper = shopMapper;
+        this.mongoTemplate = mongoTemplate;
     }
 
     // 가게 등록
@@ -77,25 +83,21 @@ public class ShopService {
         return shopRepository.findAll();
     }
 
-    // 가게 이름 수정
-    public String updateShopName(String businessNumber, String newName) {
-        Optional<ShopModel> existingshop = shopRepository.findByBusinessNumber(businessNumber);
+    // 가게 정보 수정
+    public String updateShop(ShopSignupDto shopSignupDto) {
+        String businessNumber = shopSignupDto.getBusinessNumber();
 
-        if (existingshop.isPresent()) {
-            String shopName = existingshop.get().getShop_name();
+        Optional<ShopModel> shop = shopRepository.findByBusinessNumber(businessNumber);
+        System.out.println(businessNumber);
+        if (shop.isPresent()) {
+            Query query = new Query(Criteria.where("businessNumber").is(businessNumber));
+            Update update = new Update().set("shop_name", shopSignupDto.getShop_name());
 
-            if (newName.equals(shopName)) {
-                log.info("수정 전 이름, 수정 후 이름 같음");
-                return "수정 전 이름과 수정 후 이름이 같습니다.";
-            } else {
-                ShopModel shopModel = existingshop.get();
-                shopModel.setShop_name(newName);
-                shopRepository.save(shopModel);
-                log.info("수정 완료");
-                return "수정되었습니다.";
-            }
-        }
-        else {
+            mongoTemplate.updateFirst(query, update, ShopModel.class);
+
+            log.info("수정 완료");
+            return "수정되었습니다.";
+        } else {
             log.error("존재하지 않는 가게");
             return "존재하지 않는 가게입니다.";
         }
