@@ -1,4 +1,4 @@
-package com.example.stamp_springboot;
+package com.example.stamp_springboot.config;
 
 import com.mongodb.client.MongoClient;
 import org.springframework.context.annotation.Bean;
