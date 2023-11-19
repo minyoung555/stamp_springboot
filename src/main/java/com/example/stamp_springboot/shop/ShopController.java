@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -20,14 +21,38 @@ public class ShopController {
 
     // 가게 등록
     @PostMapping("/signup")
-    public void signup(@RequestBody ShopSignupDto shopSignupDto) { shopService.signup(shopSignupDto); }
+    public String signup(@RequestBody ShopSignupDto shopSignupDto) {
+        return shopService.signup(shopSignupDto);
+    }
 
     // 가게 로그인
     @PostMapping("/login")
-    public void login(@RequestBody ShopLoginDto shopLoginDto) { shopService.login(shopLoginDto); }
+    public String login(@RequestBody ShopLoginDto shopLoginDto) {
+        return shopService.login(shopLoginDto);
+    }
 
+    // 사업자 번호로 특정 가게 조회
     @GetMapping("/getShop")
     public Optional<ShopModel> getShop(@RequestParam String businessNumber) {
         return shopService.getShop(businessNumber);
+    }
+
+    // 전체 가게 조회
+    @GetMapping("/allShops")
+    public List<ShopModel> allShops() {
+        return shopService.allShops();
+    }
+
+
+    // 가게 이름 수정
+    @PatchMapping("/updateName")
+    public String updateShopName(@RequestParam String businessNumber, @RequestBody String newName) {
+        return shopService.updateShopName(businessNumber, newName);
+    }
+
+    // 가게 삭제
+    @DeleteMapping("/deleteShop")
+    public String deleteShop(@RequestParam String businessNumber) {
+        return shopService.deleteShop(businessNumber);
     }
 }

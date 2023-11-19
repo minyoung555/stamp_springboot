@@ -7,4 +7,5 @@ import java.util.Optional;
 
 public interface ShopRepository extends MongoRepository<ShopModel, String> {
     Optional<ShopModel> findByBusinessNumber(String businessNumber);
+    Optional<ShopModel> deleteByBusinessNumber(String businessNumber);
 }
