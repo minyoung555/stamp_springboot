@@ -25,6 +25,8 @@ public class ShopModel {
 
     private String shop_name;
 
+    private Number stamp_limit;
+
     @Indexed(unique = true)
     @Field("business_number")
     private String businessNumber;

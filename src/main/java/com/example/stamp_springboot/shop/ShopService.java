@@ -1,19 +1,18 @@
 package com.example.stamp_springboot.shop;
 
 import com.example.stamp_springboot.dto.ShopLoginDto;
+import com.example.stamp_springboot.dto.ShopNameUpdateDto;
 import com.example.stamp_springboot.dto.ShopSignupDto;
+import com.example.stamp_springboot.dto.StampLimitUpdateDto;
 import com.example.stamp_springboot.mapper.ShopMapper;
 import com.example.stamp_springboot.model.ShopModel;
 import com.example.stamp_springboot.repository.ShopRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,31 +21,34 @@ import java.util.Optional;
 public class ShopService {
     private final ShopRepository shopRepository;
     private final ShopMapper shopMapper;
-    private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public ShopService(ShopRepository shopRepository, ShopMapper shopMapper, MongoTemplate mongoTemplate) {
+    public ShopService(ShopRepository shopRepository, ShopMapper shopMapper) {
         this.shopRepository = shopRepository;
         this.shopMapper = shopMapper;
-        this.mongoTemplate = mongoTemplate;
     }
 
     // 가게 등록
     public String signup(ShopSignupDto shopSignupDto) {
         String business_number = shopSignupDto.getBusinessNumber();
+        Number stamp_limit = shopSignupDto.getStamp_limit();
 
-        Optional<ShopModel> existingShop = shopRepository.findByBusinessNumber(business_number);
+        List<Integer> validValues = Arrays.asList(10, 15, 20);
 
-        if (existingShop.isPresent()) {
+        Optional<ShopModel> shop = shopRepository.findByBusinessNumber(business_number);
+
+        if (shop.isPresent()) {
             log.error("이미 존재하는 가게");
             return "이미 존재하는 가게입니다.";
+        } else if (!validValues.contains(stamp_limit.intValue())) {
+            log.error("스탬프 최대값 설정 잘못됨");
+            return "스탬프의 최대 개수는 10, 15, 20 중에서 선택해주세요.";
         }
-        else {
-            ShopModel shopModel = shopMapper.signDtoToShopModel(shopSignupDto);
-            shopRepository.save(shopModel);
-            log.info("가게 등록 성공");
-            return "가게가 등록되었습니다.";
-        }
+
+        ShopModel shopModel = shopMapper.signDtoToShopModel(shopSignupDto);
+        shopRepository.save(shopModel);
+        log.info("가게 등록 성공");
+        return "가게가 등록되었습니다.";
     }
 
     // 가게 로그인
@@ -58,8 +60,7 @@ public class ShopService {
         if (existingShop.isPresent()) {
             log.info("로그인");
             return "로그인되었습니다.";
-        }
-        else {
+        } else {
             log.error("존재하지 않는 가게");
             return "존재하지 않는 가게입니다.";
         }
@@ -71,8 +72,7 @@ public class ShopService {
 
         if (existingshop.isPresent()) {
             return existingshop;
-        }
-        else {
+        } else {
             log.error("존재하지 않는 가게");
             return Optional.empty();
         }
@@ -83,20 +83,51 @@ public class ShopService {
         return shopRepository.findAll();
     }
 
-    // 가게 정보 수정
-    public String updateShop(ShopSignupDto shopSignupDto) {
-        String businessNumber = shopSignupDto.getBusinessNumber();
+    // 가게 이름 수정(최종)
+    public String updateShopName(ShopNameUpdateDto shopNameUpdateDto) {
+        Optional<ShopModel> shop = shopRepository.findByBusinessNumber(shopNameUpdateDto.getBusinessNumber());
 
-        Optional<ShopModel> shop = shopRepository.findByBusinessNumber(businessNumber);
-        System.out.println(businessNumber);
         if (shop.isPresent()) {
-            Query query = new Query(Criteria.where("businessNumber").is(businessNumber));
-            Update update = new Update().set("shop_name", shopSignupDto.getShop_name());
+            String shopName = shop.get().getShop_name();
+            String newName = shopNameUpdateDto.getShop_name();
+            if (newName.equals(shopName)) {
+                log.info("수정 전 이름, 수정 후 이름 같음");
+                return "수정 전 이름과 수정 후 이름이 같습니다.";
+            } else {
+                ShopModel shopModel = shop.get();
+                shopModel.setShop_name(newName);
+                shopRepository.save(shopModel);
+                log.info("가게 이름 수정 완료");
+                return "가게 이름이 수정되었습니다.";
+            }
+        } else {
+            log.error("존재하지 않는 가게");
+            return "존재하지 않는 가게입니다.";
+        }
+    }
 
-            mongoTemplate.updateFirst(query, update, ShopModel.class);
+    // 스탬프 최대값 수정
+    public String updateStampLimit(StampLimitUpdateDto stampLimitUpdateDto) {
+        Optional<ShopModel> shop = shopRepository.findByBusinessNumber(stampLimitUpdateDto.getBusinessNumber());
 
-            log.info("수정 완료");
-            return "수정되었습니다.";
+        List<Integer> validValues = Arrays.asList(10, 15, 20);
+
+        if (shop.isPresent()) {
+            Number stamp_limit = shop.get().getStamp_limit();
+            Number newLimit = stampLimitUpdateDto.getStamp_limit();
+            if (newLimit.equals(stamp_limit)) {
+                log.info("수정 전후 같음");
+                return "수정 전 개수와 수정 후 개수가 같습니다.";
+            } else if (!validValues.contains(newLimit.intValue())) {
+                log.error("스탬프 최대값 설정 잘못됨");
+                return "스탬프의 최대 개수는 10, 15, 20 중에서 선택해주세요.";
+            }
+
+            ShopModel shopModel = shop.get();
+            shopModel.setStamp_limit(newLimit);
+            log.info("스탬프 최대값 수정 완료");
+            shopRepository.save(shopModel);
+            return "스탬프의 최대 개수가 수정되었습니다.";
         } else {
             log.error("존재하지 않는 가게");
             return "존재하지 않는 가게입니다.";
@@ -111,8 +142,7 @@ public class ShopService {
             shopRepository.deleteByBusinessNumber(businessNumber);
             log.info("삭제 완료");
             return "가게가 삭제되었습니다.";
-        }
-        else {
+        } else {
             log.error("존재하지 않는 가게");
             return "존재하지 않는 가게입니다.";
         }

@@ -3,8 +3,7 @@ package com.example.stamp_springboot.dto;
 import lombok.Data;
 
 @Data
-public class ShopSignupDto {
-    private String shop_name;
+public class StampLimitUpdateDto {
     private String businessNumber;
     private Number stamp_limit;
 }
