@@ -16,4 +16,6 @@ public class StampController {
     public String addStamp(@RequestBody StampAddDto stampAddDto) throws Exception {
         return stampService.addStamp(stampAddDto);
     }
+
+
 }

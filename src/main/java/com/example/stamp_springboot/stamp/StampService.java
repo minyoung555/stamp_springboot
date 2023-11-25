@@ -45,6 +45,4 @@ public class StampService {
             throw err;
         }
     }
-
-
 }
