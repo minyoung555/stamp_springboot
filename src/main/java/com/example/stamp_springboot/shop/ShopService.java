@@ -113,12 +113,12 @@ public class ShopService {
         List<Integer> validValues = Arrays.asList(10, 15, 20);
 
         if (shop.isPresent()) {
-            Number stamp_limit = shop.get().getStamp_limit();
-            Number newLimit = stampLimitUpdateDto.getStamp_limit();
+            Integer stamp_limit = shop.get().getStamp_limit();
+            Integer newLimit = stampLimitUpdateDto.getStamp_limit();
             if (newLimit.equals(stamp_limit)) {
                 log.info("수정 전후 같음");
                 return "수정 전 개수와 수정 후 개수가 같습니다.";
-            } else if (!validValues.contains(newLimit.intValue())) {
+            } else if (!validValues.contains(newLimit)) {
                 log.error("스탬프 최대값 설정 잘못됨");
                 return "스탬프의 최대 개수는 10, 15, 20 중에서 선택해주세요.";
             }

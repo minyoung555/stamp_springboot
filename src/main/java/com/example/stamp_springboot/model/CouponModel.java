@@ -22,4 +22,7 @@ public class CouponModel {
     @DBRef
     private ShopModel shop_id;
 
+    public CouponModel(ShopModel shopModel) {
+        this.shop_id = shopModel;
+    }
 }
