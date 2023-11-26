@@ -6,5 +6,5 @@ import lombok.Data;
 public class ShopSignupDto {
     private String shop_name;
     private String businessNumber;
-    private Number stamp_limit;
+    private Integer stamp_limit;
 }

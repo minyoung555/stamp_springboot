@@ -5,6 +5,7 @@ import com.example.stamp_springboot.dto.UserSignupDto;
 import com.example.stamp_springboot.mapper.UserSignupMapper;
 import com.example.stamp_springboot.model.UserModel;
 import com.example.stamp_springboot.repository.UserRepository;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+@Tag(name="User", description = "사용자 관련 기능")
 @Service
 @Slf4j
 @RequiredArgsConstructor

@@ -5,6 +5,7 @@ import com.example.stamp_springboot.dto.ShopNameUpdateDto;
 import com.example.stamp_springboot.dto.ShopSignupDto;
 import com.example.stamp_springboot.dto.StampLimitUpdateDto;
 import com.example.stamp_springboot.model.ShopModel;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@Tag(name="Shop", description = "사장님 관련 기능")
 @Slf4j
 @RestController
 @RequestMapping("/shop")
