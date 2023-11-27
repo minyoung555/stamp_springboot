@@ -38,7 +38,7 @@ public class StampController {
             summary = "Stamp를 조회합니다.",
             description = "전화번호를 파라미터로 받아 해당 사용자의 스탬프 리스트를 조회합니다.",
             responses = {
-                    @ApiResponse(responseCode = "200", description = "스탬프 추가 성공")
+                    @ApiResponse(responseCode = "200", description = "스탬프 조회 성공")
             }
     )
     @GetMapping()
