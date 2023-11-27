@@ -24,7 +24,13 @@ public class StampModel {
         this.shop_id = shop_id;
     }
 
+    public StampModel(ShopModel shop_id, Integer count) {
+        this.shop_id = shop_id;
+        this.count = count;
+    }
+
     public void plusCount() {
         this.count++;
     }
+    public void resetCount() {this.count = 1;}
 }
