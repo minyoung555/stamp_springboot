@@ -65,4 +65,18 @@ public class StampService {
             throw err;
         }
     }
+
+    public List<StampModel> getStampList(String phoneNumber) throws Exception {
+        try {
+            Optional<UserModel> user = this.userRepository.findByPhoneNumber(phoneNumber);
+            if(user.isPresent()) {
+                return user.get().getStamps();
+            }
+            log.error("getStampList : User Not Found");
+            throw new Exception("User Not Found");
+        } catch (Exception err) {
+            log.error(String.valueOf(err));
+            throw err;
+        }
+    }
 }

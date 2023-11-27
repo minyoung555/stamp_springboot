@@ -34,6 +34,14 @@ public class UserController {
         return userService.getUser(phoneNumber);
     }
 
+    @Operation(
+            operationId = "사용자 회원가입",
+            summary = "회원 가입을 위한 기능입니다..",
+            description = "사용자 정보를 입력 받아 회원 가입을 합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "회원 가입 성공")
+            }
+    )
     @PostMapping("/signup")
     public String Signup(
             @RequestBody
@@ -43,6 +51,14 @@ public class UserController {
         return this.userService.signup(signupDto);
     }
 
+    @Operation(
+            operationId = "사용자 로그인",
+            summary = "로그인을 위한 기능입니다..",
+            description = "사용자 정보를 입력 받아 로그인을 합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "로그인 성공")
+            }
+    )
     @PostMapping("/login")
     public String Login(
             @RequestBody
@@ -50,10 +66,5 @@ public class UserController {
             UserLoginDto userLoginDto
     ) {
         return this.userService.login(userLoginDto);
-    }
-
-    @DeleteMapping()
-    public String deleteUser(@RequestParam(name="phoneNumber") String phoneNumber) throws Exception {
-        return userService.deleteUser(phoneNumber);
     }
 }
