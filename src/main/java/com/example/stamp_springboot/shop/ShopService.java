@@ -31,7 +31,7 @@ public class ShopService {
     // 가게 등록
     public String signup(ShopSignupDto shopSignupDto) {
         String business_number = shopSignupDto.getBusinessNumber();
-        Number stamp_limit = shopSignupDto.getStamp_limit();
+        Integer stamp_limit = shopSignupDto.getStamp_limit();
 
         List<Integer> validValues = Arrays.asList(10, 15, 20);
 
@@ -40,7 +40,7 @@ public class ShopService {
         if (shop.isPresent()) {
             log.error("이미 존재하는 가게");
             return "이미 존재하는 가게입니다.";
-        } else if (!validValues.contains(stamp_limit.intValue())) {
+        } else if (!validValues.contains(stamp_limit)) {
             log.error("스탬프 최대값 설정 잘못됨");
             return "스탬프의 최대 개수는 10, 15, 20 중에서 선택해주세요.";
         }
