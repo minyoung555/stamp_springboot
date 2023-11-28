@@ -16,12 +16,10 @@ import java.util.Optional;
 @Service
 public class CouponService {
     private final UserRepository userRepository;
-    private final CouponRepository couponRepository;
 
     @Autowired
-    public CouponService(UserRepository userRepository, CouponRepository couponRepository) {
+    public CouponService(UserRepository userRepository) {
         this.userRepository = userRepository;
-        this.couponRepository = couponRepository;
     }
 
     // 쿠폰 사용
