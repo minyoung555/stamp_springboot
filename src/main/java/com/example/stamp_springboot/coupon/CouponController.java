@@ -26,8 +26,8 @@ public class CouponController {
                     @ApiResponse(responseCode = "200", description = "쿠폰 사용 성공")
             }
     )
-    @DeleteMapping("/useCoupon")
-    public String useCoupon(@RequestParam String phoneNumber, @RequestParam String couponId) {
-        return couponService.useCoupon(phoneNumber, couponId);
+    @DeleteMapping()
+    public String useCoupon(@RequestParam String phoneNumber, @RequestParam String couponCode) throws Exception {
+        return couponService.useCoupon(phoneNumber, couponCode);
     }
 }

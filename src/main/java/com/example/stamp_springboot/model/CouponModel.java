@@ -9,20 +9,15 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
+import java.util.UUID;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Setter
 @Getter
 @Document(collection="coupon")
 public class CouponModel {
-    @Id
-    @Field("coupon_id")
-    private String couponId;
-
+    private String couponCode;
     @DBRef
     private ShopModel shop_id;
-
-    public CouponModel(ShopModel shopModel) {
-        this.shop_id = shopModel;
-    }
 }
