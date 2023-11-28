@@ -3,7 +3,6 @@ package com.example.stamp_springboot.stamp;
 import com.example.stamp_springboot.dto.StampAddDto;
 import com.example.stamp_springboot.model.StampModel;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -34,15 +33,28 @@ public class StampController {
     }
 
     @Operation(
-            operationId = "Stamp 조회",
-            summary = "Stamp를 조회합니다.",
+            operationId = "StampList 조회",
+            summary = "StampList를 조회합니다.",
             description = "전화번호를 파라미터로 받아 해당 사용자의 스탬프 리스트를 조회합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "스탬프 조회 성공")
             }
     )
-    @GetMapping()
+    @GetMapping("/list")
     public List<StampModel> getStampList(@RequestParam(name="phoneNumber") String phoneNumber) throws Exception {
         return this.stampService.getStampList(phoneNumber);
+    }
+
+    @Operation(
+            operationId = "Stamp 조회",
+            summary = "Stamp를 조회합니다.",
+            description = "전화번호와 사업자번호를 파라미터로 받아 스탬프를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스탬프 조회 성공")
+            }
+    )
+    @GetMapping()
+    public StampModel getStamp(@RequestParam(name="phoneNumber") String phoneNumber, @RequestParam(name="businessNumber") String businessNumber) throws Exception {
+        return this.stampService.getStamp(phoneNumber, businessNumber);
     }
 }

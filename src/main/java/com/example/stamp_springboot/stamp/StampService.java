@@ -11,8 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.swing.text.html.Option;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 @Service
 @Slf4j
@@ -79,5 +79,37 @@ public class StampService {
             log.error(String.valueOf(err));
             throw err;
         }
+    }
+
+    public StampModel getStamp(String phoneNumber, String businessNumber) throws Exception {
+        try {
+            Optional<UserModel> userModel = userRepository.findByPhoneNumber(phoneNumber);
+            Optional<ShopModel> shopModel = shopRepository.findByBusinessNumber(businessNumber);
+            if(userModel.isPresent() && shopModel.isPresent()) {
+                UserModel user = userModel.get();
+                List<StampModel> stampList = user.getStamps();
+                Optional<StampModel> stampModel = findStamp(stampList,businessNumber);
+                if(stampModel.isPresent()) {
+                    log.info("getStamp : Success");
+                    return stampModel.get();
+                }
+                log.error("getStamp : Not Found Stamp");
+                throw new Exception("Not Found Stamp");
+            }
+            log.error("getStamp : Not Found User or Shop");
+            throw new Exception("Not Found User or Shop");
+        } catch (Exception err) {
+            log.error(String.valueOf(err));
+            throw err;
+        }
+    }
+
+    private Optional<StampModel> findStamp(List<StampModel> stampList, String businessNumber) {
+        for(StampModel stampModel : stampList) {
+            if(Objects.equals(stampModel.getShop_id().getBusinessNumber(), businessNumber)) {
+                return Optional.of(stampModel);
+            }
+        }
+        return Optional.empty();
     }
 }
