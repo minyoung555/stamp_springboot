@@ -71,6 +71,7 @@ public class StampService {
         try {
             Optional<UserModel> user = this.userRepository.findByPhoneNumber(phoneNumber);
             if(user.isPresent()) {
+                log.info("getStampList : Success");
                 return user.get().getStamps();
             }
             log.error("getStampList : User Not Found");
