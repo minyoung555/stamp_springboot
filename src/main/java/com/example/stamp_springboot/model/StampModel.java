@@ -14,19 +14,12 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Getter
 @Document(collection="stamp")
 public class StampModel {
-    @Id
-    private String id;
     @DBRef
     private ShopModel shop_id;
     private Integer count = 1;
 
     public StampModel(ShopModel shop_id) {
         this.shop_id = shop_id;
-    }
-
-    public StampModel(ShopModel shop_id, Integer count) {
-        this.shop_id = shop_id;
-        this.count = count;
     }
 
     public void plusCount() {

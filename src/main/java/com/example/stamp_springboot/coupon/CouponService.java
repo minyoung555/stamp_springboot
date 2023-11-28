@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 @Slf4j
@@ -24,26 +25,38 @@ public class CouponService {
     }
 
     // 쿠폰 사용
-    public String useCoupon(String phoneNumber, String couponId) {
+    public String useCoupon(String phoneNumber, String couponCode) throws Exception {
         Optional<UserModel> user = userRepository.findByPhoneNumber(phoneNumber);
-        Optional<CouponModel> coupon = couponRepository.findByCouponId(couponId);
 
-        if (user.isPresent() && coupon.isPresent()) {
+        if (user.isPresent()) {
             List<CouponModel> userCoupons = user.get().getCoupons();
+            Optional<CouponModel> couponModel = findCoupon(userCoupons, couponCode);
 
-            if (userCoupons.removeIf(c -> c.getCouponId().equals(couponId))) {
-                userRepository.save(user.get());
-                couponRepository.deleteByCouponId(couponId);
-                log.info("쿠폰 사용 완료");
-                return "쿠폰이 사용되었습니다.";
-            } else {
-                log.error("사용자가 해당 쿠폰을 소유하고 있지 않음");
-                return "사용자가 해당 쿠폰을 소유하고 있지 않습니다.";
+            if(couponModel.isPresent()) {
+                if (userCoupons.removeIf(c -> c.getCouponCode().equals(couponCode))) {
+                    user.get().setCoupons(userCoupons);
+                    userRepository.save(user.get());
+                    log.info("쿠폰 사용 완료");
+                    return "쿠폰이 사용되었습니다.";
+                }
             }
-        } else {
-            log.error("존재하지 않는 사용자 또는 쿠폰");
-            return "존재하지 않는 사용자 또는 쿠폰입니다.";
+            log.error("사용자가 해당 쿠폰을 소유하고 있지 않음");
+            throw new Exception("사용자가 해당 쿠폰을 소유하고 있지 않습니다.");
+
         }
+
+        log.error("존재하지 않는 사용자 또는 쿠폰");
+        throw new Exception("존재하지 않는 사용자 또는 쿠폰입니다.");
     }
 
+    private Optional<CouponModel> findCoupon(List<CouponModel> couponModels, String couponCode) {
+        for(CouponModel couponModel : couponModels) {
+            if(Objects.equals(couponModel.getCouponCode(), couponCode)) {
+                return Optional.of(couponModel);
+            }
+        }
+        return Optional.empty();
+    }
 }
+
+

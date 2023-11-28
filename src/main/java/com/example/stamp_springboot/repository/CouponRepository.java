@@ -6,6 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 
 public interface CouponRepository extends MongoRepository<CouponModel, String> {
-    Optional<CouponModel> deleteByCouponId(String couponId);
-    Optional<CouponModel> findByCouponId(String couponId);
+    void deleteByCouponCode(String couponCode);
+    Optional<CouponModel> findByCouponCode(String couponCode);
 }
