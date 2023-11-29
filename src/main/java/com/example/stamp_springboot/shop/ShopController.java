@@ -62,7 +62,7 @@ public class ShopController {
                     @ApiResponse(responseCode = "200", description = "특정 가게 조회 성공")
             }
     )
-    @GetMapping("/getShop")
+    @GetMapping()
     public Optional<ShopModel> getShop(@RequestParam String businessNumber) {
         return shopService.getShop(businessNumber);
     }
@@ -75,7 +75,7 @@ public class ShopController {
                     @ApiResponse(responseCode = "200", description = "모든 가게 조회 성공")
             }
     )
-    @GetMapping("/allShops")
+    @GetMapping("/list")
     public List<ShopModel> allShops() {
         return shopService.allShops();
     }
@@ -89,7 +89,7 @@ public class ShopController {
                     @ApiResponse(responseCode = "200", description = "가게명 변경 성공")
             }
     )
-    @PatchMapping("/updateShopName")
+    @PatchMapping("/name")
     public String updateShopName(@RequestBody ShopNameUpdateDto shopNameUpdateDto) {
         return shopService.updateShopName(shopNameUpdateDto);
     }
@@ -103,7 +103,7 @@ public class ShopController {
                     @ApiResponse(responseCode = "200", description = "스탬프 최대 개수 변경 성공")
             }
     )
-    @PatchMapping("/updateStampLimit")
+    @PatchMapping("/limit")
     public String updateStampLimit(@RequestBody StampLimitUpdateDto stampLimitUpdateDto) {
         return shopService.updateStampLimit(stampLimitUpdateDto);
     }
@@ -117,7 +117,7 @@ public class ShopController {
                     @ApiResponse(responseCode = "200", description = "가게 삭제 성공")
             }
     )
-    @DeleteMapping("/deleteShop")
+    @DeleteMapping()
     public String deleteShop(@RequestParam String businessNumber) {
         return shopService.deleteShop(businessNumber);
     }
