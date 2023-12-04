@@ -21,7 +21,7 @@ public class CouponController {
     @Operation(
             operationId = "쿠폰 사용",
             summary = "쿠폰을 사용합니다.",
-            description = "사용자 전화번호, 쿠폰 ID를 통해 사용자의 쿠폰을 사용합니다.",
+            description = "사용자 전화번호, 쿠폰 코드를 통해 사용자의 쿠폰을 사용합니다.",
             responses = {
                     @ApiResponse(responseCode = "200", description = "쿠폰 사용 성공")
             }

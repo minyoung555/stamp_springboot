@@ -103,7 +103,7 @@ public class ShopController {
                     @ApiResponse(responseCode = "200", description = "스탬프 최대 개수 변경 성공")
             }
     )
-    @PatchMapping("/stampLimit")
+    @PatchMapping("/limit")
     public String updateStampLimit(@RequestBody StampLimitUpdateDto stampLimitUpdateDto) {
         return shopService.updateStampLimit(stampLimitUpdateDto);
     }
