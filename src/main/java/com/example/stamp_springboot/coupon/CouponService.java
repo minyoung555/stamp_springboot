@@ -55,6 +55,18 @@ public class CouponService {
         }
         return Optional.empty();
     }
+
+    // 쿠폰 조회
+    public List<CouponModel> getCoupon(String phoneNumber) {
+        Optional<UserModel> user = userRepository.findByPhoneNumber(phoneNumber);
+        if (user.isPresent()) {
+            List<CouponModel> coupons = user.get().getCoupons();
+            return coupons;
+        }
+
+        log.error("존재하지 않는 사용자");
+        return user.map(UserModel::getCoupons).orElse(null);
+    }
 }
 
 
