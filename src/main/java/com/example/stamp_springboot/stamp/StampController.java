@@ -57,4 +57,17 @@ public class StampController {
     public StampModel getStamp(@RequestParam(name="phoneNumber") String phoneNumber, @RequestParam(name="businessNumber") String businessNumber) throws Exception {
         return this.stampService.getStamp(phoneNumber, businessNumber);
     }
+
+    @Operation(
+            operationId = "Stamp 삭제",
+            summary = "Stamp를 삭제합니다.",
+            description = "전화번호와 사업자번호를 파라미터로 받아 스탬프를 삭제합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "스탬프 삭제 성공")
+            }
+    )
+    @DeleteMapping()
+    public String deleteStamp(@RequestParam(name="phoneNumber") String phoneNumber, @RequestParam(name="businessNumber") String businessNumber) throws Exception {
+        return this.stampService.deleteStamp(phoneNumber, businessNumber);
+    }
 }

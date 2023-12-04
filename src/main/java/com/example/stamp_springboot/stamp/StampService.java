@@ -39,22 +39,27 @@ public class StampService {
                                 List<CouponModel> couponModels = userModel.get().getCoupons();
                                 couponModels.add(couponModel);
                                 userModel.get().setCoupons(couponModels);
+                                stampModelList.replaceAll(stampModel2 -> stampModel2 == stampModel ? stampModel1 : stampModel2);
+                                userModel.get().setStamps(stampModelList);
+                                userRepository.save(userModel.get());
+                                log.info("addStamp : stamp plus");
+                                return "stamp plus, coupon create";
                             } else {
                                 stampModel1.plusCount();
                             }
                             stampModelList.replaceAll(stampModel2 -> stampModel2 == stampModel ? stampModel1 : stampModel2);
                             userModel.get().setStamps(stampModelList);
                             userRepository.save(userModel.get());
-                            log.info("addStamp : Success");
-                            return "success";
+                            log.info("addStamp : stamp plus");
+                            return "stamp plus";
                         }
                     }
                     StampModel stampModel = new StampModel(shopModel.get());
                     stampModelList.add(stampModel);
                     userModel.get().setStamps(stampModelList);
                     userRepository.save(userModel.get());
-                    log.info("addStamp : Success");
-                    return "success";
+                    log.info("addStamp : stamp create");
+                    return "stamp create";
                 }
                 log.error("addStamp : User Not Found");
                 throw new Exception("User Not Found");
@@ -98,6 +103,32 @@ public class StampService {
                 throw new Exception("Not Found Stamp");
             }
             log.error("getStamp : Not Found User or Shop");
+            throw new Exception("Not Found User or Shop");
+        } catch (Exception err) {
+            log.error(String.valueOf(err));
+            throw err;
+        }
+    }
+
+    public String deleteStamp(String phoneNumber, String businessNumber) throws Exception {
+        try {
+            Optional<UserModel> userModel = userRepository.findByPhoneNumber(phoneNumber);
+            Optional<ShopModel> shopModel = shopRepository.findByBusinessNumber(businessNumber);
+            if(userModel.isPresent() && shopModel.isPresent()) {
+                UserModel user = userModel.get();
+                List<StampModel> stampList = user.getStamps();
+                Optional<StampModel> stampModel = findStamp(stampList,businessNumber);
+                if(stampModel.isPresent()) {
+                    stampList.remove(stampModel.get());
+                    userModel.get().setStamps(stampList);
+                    userRepository.save(userModel.get());
+                    log.info("deleteStamp : Success");
+                    return "success";
+                }
+                log.error("deleteStamp : Not Found Stamp");
+                throw new Exception("Not Found Stamp");
+            }
+            log.error("deleteStamp : Not Found User or Shop");
             throw new Exception("Not Found User or Shop");
         } catch (Exception err) {
             log.error(String.valueOf(err));
