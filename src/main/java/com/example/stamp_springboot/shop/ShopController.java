@@ -1,9 +1,6 @@
 package com.example.stamp_springboot.shop;
 
-import com.example.stamp_springboot.dto.ShopLoginDto;
-import com.example.stamp_springboot.dto.ShopNameUpdateDto;
-import com.example.stamp_springboot.dto.ShopSignupDto;
-import com.example.stamp_springboot.dto.StampLimitUpdateDto;
+import com.example.stamp_springboot.dto.*;
 import com.example.stamp_springboot.model.ShopModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -120,5 +117,18 @@ public class ShopController {
     @DeleteMapping()
     public String deleteShop(@RequestParam String businessNumber) {
         return shopService.deleteShop(businessNumber);
+    }
+
+    @Operation(
+            operationId = "가게 쿠폰 정보 수정",
+            summary = "가게 쿠폰 정보를 수정합니다.",
+            description = "쿠폰의 카테고리와 설명을 수정합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "수정 성공")
+            }
+    )
+    @PutMapping("/coupon")
+    public  String changeCouponInformation(@RequestBody ShopCouponInformationDto shopCouponInformationDto) {
+        return shopService.changeCouponInformation(shopCouponInformationDto);
     }
 }

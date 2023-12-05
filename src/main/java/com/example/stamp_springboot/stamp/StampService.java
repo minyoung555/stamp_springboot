@@ -35,7 +35,7 @@ public class StampService {
                             if ((stampModel.getCount()+1)%stampLimit  == 0) {
                                 stampModel1.resetCount();
                                 UUID couponCode = UUID.randomUUID();
-                                CouponModel couponModel = new CouponModel(String.valueOf(couponCode), shopModel.get());
+                                CouponModel couponModel = new CouponModel(String.valueOf(couponCode), shopModel.get(), shopModel.get().getCoupon_category(), shopModel.get().getCoupon_description());
                                 List<CouponModel> couponModels = userModel.get().getCoupons();
                                 couponModels.add(couponModel);
                                 userModel.get().setCoupons(couponModels);

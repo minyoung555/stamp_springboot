@@ -27,6 +27,10 @@ public class ShopModel {
 
     private Integer stamp_limit;
 
+    private String coupon_category;
+
+    private String coupon_description;
+
     @Indexed(unique = true)
     @Field("business_number")
     private String businessNumber;

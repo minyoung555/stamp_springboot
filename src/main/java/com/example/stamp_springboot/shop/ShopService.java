@@ -1,9 +1,6 @@
 package com.example.stamp_springboot.shop;
 
-import com.example.stamp_springboot.dto.ShopLoginDto;
-import com.example.stamp_springboot.dto.ShopNameUpdateDto;
-import com.example.stamp_springboot.dto.ShopSignupDto;
-import com.example.stamp_springboot.dto.StampLimitUpdateDto;
+import com.example.stamp_springboot.dto.*;
 import com.example.stamp_springboot.mapper.ShopMapper;
 import com.example.stamp_springboot.model.ShopModel;
 import com.example.stamp_springboot.repository.ShopRepository;
@@ -142,6 +139,20 @@ public class ShopService {
             shopRepository.deleteByBusinessNumber(businessNumber);
             log.info("삭제 완료");
             return "가게가 삭제되었습니다.";
+        } else {
+            log.error("존재하지 않는 가게");
+            return "존재하지 않는 가게입니다.";
+        }
+    }
+
+    public String changeCouponInformation(ShopCouponInformationDto shopCouponInformationDto) {
+        Optional<ShopModel> shop = shopRepository.findByBusinessNumber(shopCouponInformationDto.getBusinessNumber());
+        if (shop.isPresent()) {
+            shop.get().setCoupon_category(shopCouponInformationDto.getCoupon_category());
+            shop.get().setCoupon_description(shopCouponInformationDto.getCoupon_description());
+            shopRepository.save(shop.get());
+            log.info("수정 완료");
+            return "수정되었습니다.";
         } else {
             log.error("존재하지 않는 가게");
             return "존재하지 않는 가게입니다.";
