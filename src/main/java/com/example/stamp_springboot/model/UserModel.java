@@ -30,6 +30,8 @@ public class UserModel {
     @Indexed(unique = true)
     private String phoneNumber;
 
+    private byte[] image;
+
     private List<StampModel> stamps = new ArrayList<>();
 
     private List<CouponModel> coupons = new ArrayList<>();
