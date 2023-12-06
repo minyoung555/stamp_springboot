@@ -1,8 +1,11 @@
 package com.example.stamp_springboot.coupon;
 
+import com.example.stamp_springboot.dto.StampAddDto;
 import com.example.stamp_springboot.model.CouponModel;
+import com.example.stamp_springboot.model.ShopModel;
 import com.example.stamp_springboot.model.UserModel;
 import com.example.stamp_springboot.repository.CouponRepository;
+import com.example.stamp_springboot.repository.ShopRepository;
 import com.example.stamp_springboot.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,14 +14,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
 public class CouponService {
     private final UserRepository userRepository;
+    private final ShopRepository shopRepository;
 
     @Autowired
-    public CouponService(UserRepository userRepository) {
+    public CouponService(UserRepository userRepository, ShopRepository shopRepository) {
+        this.shopRepository = shopRepository;
         this.userRepository = userRepository;
     }
 
@@ -66,6 +72,27 @@ public class CouponService {
 
         log.error("존재하지 않는 사용자");
         return user.map(UserModel::getCoupons).orElse(null);
+    }
+
+    public String addCoupon(StampAddDto stampAddDto) throws Exception {
+        Optional<UserModel> userModel = userRepository.findByPhoneNumber(stampAddDto.getPhoneNumber());
+        if(userModel.isPresent()) {
+            Optional<ShopModel> shopModel = shopRepository.findByBusinessNumber(stampAddDto.getBusinessNumber());
+            if(shopModel.isPresent()) {
+                UUID couponCode = UUID.randomUUID();
+                CouponModel couponModel = new CouponModel(String.valueOf(couponCode), shopModel.get(), shopModel.get().getCoupon_category(), shopModel.get().getCoupon_description());
+                List<CouponModel> couponModels = userModel.get().getCoupons();
+                couponModels.add(couponModel);
+                userModel.get().setCoupons(couponModels);
+                userRepository.save(userModel.get());
+                log.info("addCoupon : coupon create");
+                return "coupon create";
+            }
+            log.error("addCoupon : shop not found");
+            throw new Exception("shop not found");
+        }
+        log.error("addCoupon ; user not found");
+        throw new Exception("user not found");
     }
 }
 

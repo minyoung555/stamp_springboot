@@ -1,5 +1,6 @@
 package com.example.stamp_springboot.coupon;
 
+import com.example.stamp_springboot.dto.StampAddDto;
 import com.example.stamp_springboot.model.CouponModel;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -46,5 +47,18 @@ public class CouponController {
     @GetMapping()
     public List<CouponModel> getCoupon(@RequestParam String phoneNumber) {
         return couponService.getCoupon(phoneNumber);
+    }
+
+    @Operation(
+            operationId = "쿠폰 추가",
+            summary = "쿠폰을 추가합니다.",
+            description = "사용자의 쿠폰을 추가합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "쿠폰 추가 성공")
+            }
+    )
+    @PostMapping()
+    public String addStamp(@RequestBody StampAddDto stampAddDto) throws Exception {
+        return couponService.addCoupon(stampAddDto);
     }
 }

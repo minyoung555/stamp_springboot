@@ -20,6 +20,6 @@ public class CouponModel {
     private String couponCode;
     @DBRef
     private ShopModel shop_id;
-    private String category = "기본";
-    private String description = "쿠폰 설명";
+    private String category;
+    private String description;
 }

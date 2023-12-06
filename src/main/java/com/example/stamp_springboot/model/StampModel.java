@@ -25,5 +25,5 @@ public class StampModel {
     public void plusCount() {
         this.count++;
     }
-    public void resetCount() {this.count = 1;}
+    public void resetCount() {this.count = 0;}
 }
