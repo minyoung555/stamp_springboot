@@ -47,7 +47,7 @@ public class UserController {
             @RequestBody
             @Valid
             UserSignupDto signupDto
-    ) {
+    ) throws Exception {
         return this.userService.signup(signupDto);
     }
 
@@ -64,7 +64,7 @@ public class UserController {
             @RequestBody
             @Valid
             UserLoginDto userLoginDto
-    ) {
+    ) throws Exception {
         return this.userService.login(userLoginDto);
     }
 }

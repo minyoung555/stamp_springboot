@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
@@ -21,11 +22,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserSignupMapper userSignupMapper;
 
-    public String signup(UserSignupDto userSignupDto) {
+    public String signup(UserSignupDto userSignupDto) throws Exception {
         try {
             Optional<UserModel> phoneNumberIsPresent = userRepository.findByPhoneNumber(userSignupDto.getPhoneNumber());
             if(phoneNumberIsPresent.isEmpty()){
                 UserModel userModel = userSignupMapper.toUserModel(userSignupDto);
+                userModel.setImage(userSignupDto.getImage().getBytes());
                 userRepository.save(userModel);
 
                 log.info("UserSignup is success");
@@ -33,14 +35,14 @@ public class UserService {
             }
 
             log.error("This phone number already exists");
-            return "This phone number already exists";
+            throw new Exception("This phone number already exists");
         } catch(Exception e){
             log.error(String.valueOf(e));
             throw e;
         }
     }
 
-    public String login(UserLoginDto userLoginDto){
+    public String login(UserLoginDto userLoginDto) throws Exception {
         try {
             Optional<UserModel> loginUserModel = userRepository.findByPhoneNumber(userLoginDto.getPhoneNumber());
 
@@ -55,7 +57,7 @@ public class UserService {
             }
 
             log.error("User not found");
-            return "login failed";
+            throw new Exception("login failed");
         } catch(Exception e) {
             log.error(String.valueOf(e));
             throw e;
