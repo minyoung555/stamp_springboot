@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -130,5 +131,31 @@ public class ShopController {
     @PutMapping("/coupon")
     public  String changeCouponInformation(@RequestBody ShopCouponInformationDto shopCouponInformationDto) {
         return shopService.changeCouponInformation(shopCouponInformationDto);
+    }
+
+    @Operation(
+            operationId = "가게 쿠폰 이미지 저장 및 수정",
+            summary = "가게 쿠폰 이미지를 저장/수정합니다.",
+            description = "가게 쿠폰 이미지를 저장/수정합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "저장/수정 성공")
+            }
+    )
+    @PostMapping("/image")
+    public String setImage(@ModelAttribute ImageDto imageDto) throws Exception {
+        return shopService.setImage(imageDto);
+    }
+
+    @Operation(
+            operationId = "가게 쿠폰 이미지 조회",
+            summary = "가게 쿠폰 이미지를 조회합니다.",
+            description = "가게 쿠폰 이미지를 조회합니다.",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "조회 성공")
+            }
+    )
+    @GetMapping(value = "/image", produces = MediaType.IMAGE_JPEG_VALUE)
+    public @ResponseBody byte[] getImage(@RequestParam String businessNumber) throws Exception {
+        return shopService.getImage(businessNumber);
     }
 }

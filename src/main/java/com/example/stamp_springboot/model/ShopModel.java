@@ -8,6 +8,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
@@ -34,6 +35,9 @@ public class ShopModel {
     @Indexed(unique = true)
     @Field("business_number")
     private String businessNumber;
+
+    @DBRef
+    private ImageModel imageModel;
 
     @Field("created_at")
     @CreatedDate

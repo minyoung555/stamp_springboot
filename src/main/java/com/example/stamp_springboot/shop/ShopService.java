@@ -2,14 +2,20 @@ package com.example.stamp_springboot.shop;
 
 import com.example.stamp_springboot.dto.*;
 import com.example.stamp_springboot.mapper.ShopMapper;
+import com.example.stamp_springboot.model.ImageModel;
 import com.example.stamp_springboot.model.ShopModel;
+import com.example.stamp_springboot.repository.ImageRepository;
 import com.example.stamp_springboot.repository.ShopRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.awt.*;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,11 +24,13 @@ import java.util.Optional;
 public class ShopService {
     private final ShopRepository shopRepository;
     private final ShopMapper shopMapper;
+    private final ImageRepository imageRepository;
 
     @Autowired
-    public ShopService(ShopRepository shopRepository, ShopMapper shopMapper) {
+    public ShopService(ShopRepository shopRepository, ShopMapper shopMapper, ImageRepository imageRepository) {
         this.shopRepository = shopRepository;
         this.shopMapper = shopMapper;
+        this.imageRepository = imageRepository;
     }
 
     // 가게 등록
@@ -157,5 +165,35 @@ public class ShopService {
             log.error("존재하지 않는 가게");
             return "존재하지 않는 가게입니다.";
         }
+    }
+
+    public String setImage(ImageDto imageDto) throws Exception {
+        Optional<ShopModel> shopModel = shopRepository.findByBusinessNumber(imageDto.getBusinessNumber());
+        if(shopModel.isPresent()) {
+            Optional<ImageModel> image = imageRepository.findImageModelByBusinessNumber(imageDto.getBusinessNumber());
+            MultipartFile imageFile = imageDto.getImage();
+            if(image.isPresent()) {
+                image.get().setImage(imageFile.getBytes());
+                imageRepository.save(image.get());
+            } else {
+                ImageModel imageModel = new ImageModel();
+                imageModel.setBusinessNumber(imageDto.getBusinessNumber());
+                imageModel.setImage(imageFile.getBytes());
+                imageRepository.save(imageModel);
+            }
+            log.info("이미지 저장 성공");
+            return "저장완료";
+        }
+        log.error("존재하지 않는 가게");
+        throw new Exception("존재하지 않는 가게입니다.");
+    }
+
+    public byte[] getImage(String businessNumber) throws Exception {
+        Optional<ImageModel> imageModel = imageRepository.findImageModelByBusinessNumber(businessNumber);
+        if(imageModel.isPresent()) {
+            return imageModel.get().getImage();
+        }
+        Optional<ImageModel> basicImage = imageRepository.findImageModelByBusinessNumber("기본이미지");
+        return basicImage.get().getImage();
     }
 }

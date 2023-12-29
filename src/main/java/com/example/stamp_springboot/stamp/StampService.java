@@ -1,10 +1,9 @@
 package com.example.stamp_springboot.stamp;
 
 import com.example.stamp_springboot.dto.StampAddDto;
-import com.example.stamp_springboot.model.CouponModel;
-import com.example.stamp_springboot.model.ShopModel;
-import com.example.stamp_springboot.model.StampModel;
-import com.example.stamp_springboot.model.UserModel;
+import com.example.stamp_springboot.dto.StampDto;
+import com.example.stamp_springboot.model.*;
+import com.example.stamp_springboot.repository.ImageRepository;
 import com.example.stamp_springboot.repository.ShopRepository;
 import com.example.stamp_springboot.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +19,7 @@ import java.util.*;
 public class StampService {
     private final UserRepository userRepository;
     private final ShopRepository shopRepository;
+    private final ImageRepository imageRepository;
 
     public String addStamp(StampAddDto stampAddDto) throws Exception {
         try {
@@ -72,12 +72,26 @@ public class StampService {
         }
     }
 
-    public List<StampModel> getStampList(String phoneNumber) throws Exception {
+    public List<StampDto> getStampList(String phoneNumber) throws Exception {
         try {
             Optional<UserModel> user = this.userRepository.findByPhoneNumber(phoneNumber);
             if(user.isPresent()) {
                 log.info("getStampList : Success");
-                return user.get().getStamps();
+                List<StampDto> stampDtoList  = new ArrayList<>();
+                for(StampModel stampModel : user.get().getStamps()) {
+                    StampDto stampDto = new StampDto();
+                    stampDto.setCount(stampModel.getCount());
+                    stampDto.setShopId(stampModel.getShop_id());
+                    Optional<ImageModel> imageModel = imageRepository.findImageModelByBusinessNumber(stampModel.getShop_id().getBusinessNumber());
+                    if(imageModel.isPresent()) {
+                        stampDto.setImage(imageModel.get().getImage());
+                    } else {
+                        Optional<ImageModel> basicImage = imageRepository.findImageModelByBusinessNumber("기본이미지");
+                        basicImage.ifPresent(model -> stampDto.setImage(model.getImage()));
+                    }
+                    stampDtoList.add(stampDto);
+                }
+                return stampDtoList;
             }
             log.error("getStampList : User Not Found");
             throw new Exception("User Not Found");
@@ -87,7 +101,7 @@ public class StampService {
         }
     }
 
-    public StampModel getStamp(String phoneNumber, String businessNumber) throws Exception {
+    public StampDto getStamp(String phoneNumber, String businessNumber) throws Exception {
         try {
             Optional<UserModel> userModel = userRepository.findByPhoneNumber(phoneNumber);
             Optional<ShopModel> shopModel = shopRepository.findByBusinessNumber(businessNumber);
@@ -96,8 +110,18 @@ public class StampService {
                 List<StampModel> stampList = user.getStamps();
                 Optional<StampModel> stampModel = findStamp(stampList,businessNumber);
                 if(stampModel.isPresent()) {
+                    StampDto stampDto = new StampDto();
+                    stampDto.setCount(stampModel.get().getCount());
+                    stampDto.setShopId(stampModel.get().getShop_id());
+                    Optional<ImageModel> imageModel = imageRepository.findImageModelByBusinessNumber(businessNumber);
+                    if(imageModel.isPresent()) {
+                        stampDto.setImage(imageModel.get().getImage());
+                    } else {
+                        Optional<ImageModel> basicImage = imageRepository.findImageModelByBusinessNumber("기본이미지");
+                        basicImage.ifPresent(model -> stampDto.setImage(model.getImage()));
+                    }
                     log.info("getStamp : Success");
-                    return stampModel.get();
+                    return stampDto;
                 }
                 log.error("getStamp : Not Found Stamp");
                 throw new Exception("Not Found Stamp");

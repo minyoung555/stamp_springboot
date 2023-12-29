@@ -1,7 +1,7 @@
 package com.example.stamp_springboot.stamp;
 
 import com.example.stamp_springboot.dto.StampAddDto;
-import com.example.stamp_springboot.model.StampModel;
+import com.example.stamp_springboot.dto.StampDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,7 +41,7 @@ public class StampController {
             }
     )
     @GetMapping("/list")
-    public List<StampModel> getStampList(@RequestParam(name="phoneNumber") String phoneNumber) throws Exception {
+    public List<StampDto> getStampList(@RequestParam(name="phoneNumber") String phoneNumber) throws Exception {
         return this.stampService.getStampList(phoneNumber);
     }
 
@@ -54,7 +54,7 @@ public class StampController {
             }
     )
     @GetMapping()
-    public StampModel getStamp(@RequestParam(name="phoneNumber") String phoneNumber, @RequestParam(name="businessNumber") String businessNumber) throws Exception {
+    public StampDto getStamp(@RequestParam(name="phoneNumber") String phoneNumber, @RequestParam(name="businessNumber") String businessNumber) throws Exception {
         return this.stampService.getStamp(phoneNumber, businessNumber);
     }
 
